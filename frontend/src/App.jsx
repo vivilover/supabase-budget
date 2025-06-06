@@ -3,6 +3,7 @@
 import "./assets/styles.css";
 import { Outlet, Routes, Route, NavLink } from "react-router";
 import SpendingList from "./components/SpendingList";
+import AddSpending from "./components/AddSpending";
 
 // const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
 
@@ -37,7 +38,7 @@ function App() {
         <Route path="history" element={<SpendingList />} />
         <Route
           index // <-- "/"
-          element={<div>Default Page Content</div>}
+          element={<AddSpending />}
         />
       </Route>
       {/* <div class="font-bold underline">setup</div>

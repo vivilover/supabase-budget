@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
+import { getList } from '../utils/queries.js';
 
 function SpendingList() {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    getList();
+    (async () => {
+      const data = await getList();
+      setList(data);
+    })()
   }, []);
-
-  async function getList() {
-    const { data } = await supabase.from("spending").select();
-    setList(data);
-  }
 
   return (
     <div>
