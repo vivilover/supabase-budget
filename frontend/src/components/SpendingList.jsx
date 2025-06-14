@@ -6,6 +6,7 @@ function SpendingList() {
   const [list, setList] = useState([]);
   const { user } = useContext(AuthContext);
   const userId = user.id;
+  const userName = user.email.split('@')[0];
 
   useEffect(() => {
     (async () => {
@@ -19,7 +20,7 @@ function SpendingList() {
 
   return (
     <div className="w-full">
-      <div className="font-bold underline">List for</div>
+      <div className="font-bold underline">List for {userName}</div>
       <div className="flex flex-col">
         {list.map((l) => (
           <div
