@@ -1,92 +1,71 @@
-import { useState, useEffect } from "react";
+import { useContext } from "react";
 import { insertSpending } from "../utils/queries.js";
+import { AuthContext } from "./AuthContext.jsx";
+
+// React Hook Form dependencies
+import { useForm } from "react-hook-form";
 
 function AddSpending() {
-  const [formData, setFormData] = useState({
-    date: "",
-    name: "",
-    amount: "",
-    category: "",
-    description: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  // const [date, setDate] = useState("");
-  // const [name, setName] = useState("");
-  // const [amount, setAmount] = useState(0.0);
-  // const [category, setCategory] = useState("");
-  // const [description, setDescription] = useState("");
-
-  const addInput = async (e) => {
-    e.preventDefault();
-    console.log(formData.name);
-    console.log(formData.amount);
-    const { date, name, amount, category, description } = formData;
+  const { user } = useContext(AuthContext);
+  // React Hook Form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    resetField,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (data) => {
+    console.log(data);
+    const { date, name, amount, category, description } = data;
     const result = await insertSpending(
       name,
       date,
       category,
       description,
-      amount
+      amount,
+      user.id,
     );
-    console.log(result);
-    setFormData({
-      date: "",
-      name: "",
-      amount: "",
-      category: "",
-      description: "",
-    });
+    // reset all field values
+    resetField('date');
+    resetField('name');
+    resetField('category');
+    resetField('amount');
+    resetField('description');
   };
 
   return (
-    <form action="" className="add-form gap-x-2" onSubmit={addInput}>
+    <form
+      action=""
+      className="add-form gap-x-2"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <label htmlFor="date">Date</label>
       <input
         type="date"
-        id="date"
-        name="date"
-        value={formData.date}
-        onChange={handleChange}
+        {...register("date")}
       />
       <label htmlFor="name">Name</label>
       <input
         type="text"
-        id="name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
+        {...register("name", { required: true })}
       />
       <label htmlFor="amount">Amount</label>
       <input
         type="number"
         step="0.01"
-        id="amount"
-        name="amount"
-        value={formData.amount}
-        onChange={handleChange}
+        {...register("amount")}
       />
       <label htmlFor="category">Category</label>
       <input
         type="text"
-        id="category"
-        name="category"
-        value={formData.category}
-        onChange={handleChange}
+        {...register("category")}
       />
       <label htmlFor="description">Description</label>
       <input
         type="text"
-        id="description"
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
+        {...register("description")}
       />
       <button
         type="submit"

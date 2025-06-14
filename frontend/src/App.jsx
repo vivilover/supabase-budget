@@ -1,53 +1,49 @@
-// import { useEffect, useState } from "react";
-// import { createClient } from "@supabase/supabase-js";
+import { useEffect, useContext } from "react";
 import "./assets/styles.css";
-import { Outlet, Routes, Route, NavLink } from "react-router";
+import { Routes, Route } from "react-router";
 import SpendingList from "./components/SpendingList";
 import AddSpending from "./components/AddSpending";
-
-// const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY);
-
-function SideBar() {
-  return (
-    <div className="flex gap-x-4">
-      <div className="">
-        <div><NavLink to="add">Input</NavLink></div>
-        <div><NavLink to="history">View</NavLink></div>
-        <div><NavLink to="visualize">Visualize (beta)</NavLink></div>
-      </div>
-      <Outlet />
-    </div>
-  );
-}
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+import SideBar from "./components/SideBar";
+import { supabase } from "./utils/queries";
+import { AuthContext } from "./components/AuthContext";
 
 function App() {
-  // const [list, setList] = useState([]);
+  const { isAuthenticated, user, login, logout } = useContext(AuthContext);
+  
+  useEffect(() => {
+    const getCurrSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
 
-  // useEffect(() => {
-  //   getList();
-  // }, []);
+      if (data.session == null) {
+        console.log(`log in status: ${isAuthenticated}`);
+        logout();
+      } else {
+        console.log(`log in status: ${isAuthenticated}`);
+        console.log(data.session.user);
+        login(data.session.user);
+      }
+    };
+    getCurrSession();
+  }, []);
 
-  // async function getList() {
-  //   const { data } = await supabase.from("spending").select();
-  //   setList(data);
-  // }
-
-  return (
-    <Routes>
-      <Route path="/" element={<SideBar />}>
-        <Route path="history" element={<SpendingList />} />
-        <Route
-          index // <-- "/"
-          element={<AddSpending />}
-        />
-      </Route>
-      {/* <div class="font-bold underline">setup</div>
-      <ul>
-        {list.map((l) => (
-          <li key={l.name}>{l.name}</li>
-        ))}
-      </ul> */}
-    </Routes>
+  return isAuthenticated ? (
+      <Routes>
+        <Route path="/" element={<SideBar />}>
+          {/* list of all purchase */}
+          <Route path="history" element={<SpendingList />} /> 
+          <Route
+            index // <-- "/"
+            element={<AddSpending />}
+          />
+        </Route>
+      </Routes>
+  ) : (
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="sign-up" element={<Signup />} />
+      </Routes>
   );
 }
 

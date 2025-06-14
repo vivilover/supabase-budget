@@ -1,13 +1,50 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
+export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
+export async function signUp(email, password) {
+  let { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  })
+
+  if (error) {
+    console.log({ error })
+  }
+}
+
+export async function signIn(email, password) {
+  let { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  })
+
+  if (error) {
+    console.log({ error });
+  } else {
+    console.log({ data });
+  }
+}
+
+export async function signOut() {
+  const { error } = await supabase.auth.signOut()
+  if (error) {
+    console.log({ error })
+  } else {
+    console.log("Successfully signed out");
+  }
+}
+
 export async function getList() {
-  const { data } = await supabase.from("spending").select();
-  console.log(data);
+  const { data, error } = await supabase.from("spending").select();
+  if (!error) {
+    console.log(data);
+  } else {
+    console.log(error);
+  }
   return data;
 }
 
@@ -16,7 +53,8 @@ export async function insertSpending(
   date,
   category,
   description,
-  amount
+  amount,
+  id
 ) {
   const { error } = await supabase
     .from("spending")
@@ -26,6 +64,7 @@ export async function insertSpending(
       category: category,
       description: description,
       amount: amount,
+      user_id: id,
     });
   return error;
 }

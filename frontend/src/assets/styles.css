@@ -4,10 +4,6 @@ html {
   padding: 0.5em 0.5em;
 }
 
-form {
-  font-size: 0.8em;
-}
-
 .add-form input {
   border-width: 2px;
   border-color: #707070;
