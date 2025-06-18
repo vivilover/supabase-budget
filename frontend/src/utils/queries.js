@@ -38,8 +38,8 @@ export async function signOut() {
   }
 }
 
-export async function getList() {
-  const { data, error } = await supabase.from("spending").select();
+export async function getList(userId) {
+  const { data, error } = await supabase.from("spending").select().eq('user_id', userId);
   if (!error) {
     console.log(data);
   } else {

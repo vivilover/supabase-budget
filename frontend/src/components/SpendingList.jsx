@@ -10,11 +10,8 @@ function SpendingList() {
 
   useEffect(() => {
     (async () => {
-      const spendings = await getList();
-      const userSpending = spendings.filter(
-        (spending) => spending.user_id === userId
-      );
-      setList(userSpending);
+      const spendings = await getList(userId);
+      setList(spendings);
     })();
   }, []);
 

@@ -4,9 +4,9 @@ import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { AuthContext } from "./AuthContext";
-import { insertCategory } from "../utils/queries.js";
+import { insertCategory, getCategory } from "../utils/queries.js";
 
-function AddCategory() {
+function AddCategory({ setCategories }) {
   const { user } = useContext(AuthContext);
   // Q: for color, but is this necessary?
   const [color, setColor] = useState("#aabbcc");
@@ -35,6 +35,8 @@ function AddCategory() {
     const result = await insertCategory(name, user.id);
     // reset all field values
     reset();
+    const userCategories = await getCategory(user.id);
+    setCategories(userCategories);
   };
 
   return (

@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
-import { insertSpending } from "../utils/queries.js";
+import { useContext, useState, useEffect } from "react";
+import { insertSpending, getCategory } from "../utils/queries.js";
 import { AuthContext } from "./AuthContext.jsx";
-import CurrCategory from './CurrCategory.jsx';
-import AddCategory from './AddCategory.jsx';
+import CurrCategory from "./CurrCategory.jsx";
+import AddCategory from "./AddCategory.jsx";
 
 // React Hook Form dependencies
 import { useForm } from "react-hook-form";
@@ -10,16 +10,24 @@ import { useForm } from "react-hook-form";
 function AddSpending() {
   // use state here to update categories
   const [categories, setCategories] = useState([]);
-  
+
   const { user } = useContext(AuthContext);
+  // To synchronize user category upon User Adding the category
+  useEffect(() => {
+    (async () => {
+      const userCategories = await getCategory(user.id);
+      setCategories(userCategories);
+    })();
+  }, []); // When categories change, trigger useEffect again
+
   const [showCurrCategory, setShowCurrCategory] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const toggleVisibilityCurrCategory = () => {
     setShowCurrCategory(!showCurrCategory);
-  } 
+  };
   const toggleVisibilityAddCategory = () => {
     setShowAddCategory(!showAddCategory);
-  } 
+  };
 
   // React Hook Form
   const {
@@ -75,10 +83,20 @@ function AddSpending() {
           Add
         </button>
       </form>
-      <div className="font-medium text-gray-400" onClick={toggleVisibilityCurrCategory}>Show existing categories</div>
-      { showCurrCategory &&  <CurrCategory /> }
-      <div className="font-medium text-gray-400" onClick={toggleVisibilityAddCategory}>Add category</div>
-      { showAddCategory &&  <AddCategory /> }
+      <div
+        className="font-medium text-gray-400"
+        onClick={toggleVisibilityCurrCategory}
+      >
+        Show existing categories
+      </div>
+      {showCurrCategory && <CurrCategory categories={categories} setCategories={setCategories} />}
+      <div
+        className="font-medium text-gray-400"
+        onClick={toggleVisibilityAddCategory}
+      >
+        Add category
+      </div>
+      {showAddCategory && <AddCategory setCategories={setCategories} />}
     </div>
   );
 }
