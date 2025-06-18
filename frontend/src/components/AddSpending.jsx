@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 function AddSpending() {
   // use state here to update categories
   const [categories, setCategories] = useState([]);
+  const numCategory = categories.length;
 
   const { user } = useContext(AuthContext);
   // To synchronize user category upon User Adding the category
@@ -17,6 +18,7 @@ function AddSpending() {
     (async () => {
       const userCategories = await getCategory(user.id);
       setCategories(userCategories);
+      console.log(userCategories);
     })();
   }, []); // When categories change, trigger useEffect again
 
@@ -71,7 +73,14 @@ function AddSpending() {
         <label htmlFor="amount">Amount</label>
         <input type="number" step="0.01" {...register("amount")} />
         <label htmlFor="category">Category</label>
-        <input type="text" {...register("category")} />
+        {/* <input type="text" {...register("category")} /> */}
+        <select {...register("category")} className="border-gray-500 border-2">
+          {categories.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
+        </select>
         <label htmlFor="description">Description</label>
         <input type="text" {...register("description")} />
         <button
@@ -83,13 +92,18 @@ function AddSpending() {
           Add
         </button>
       </form>
-      <div
+      <div className="text-red-400 text-sm">
+        * Spending category can be added below
+      </div>
+      {/* <div
         className="font-medium text-gray-400"
         onClick={toggleVisibilityCurrCategory}
       >
         Show existing categories
       </div>
-      {showCurrCategory && <CurrCategory categories={categories} setCategories={setCategories} />}
+      {showCurrCategory && (
+        <CurrCategory categories={categories} setCategories={setCategories} />
+      )} */}
       <div
         className="font-medium text-gray-400"
         onClick={toggleVisibilityAddCategory}
