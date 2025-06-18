@@ -8,6 +8,9 @@ import AddCategory from './AddCategory.jsx';
 import { useForm } from "react-hook-form";
 
 function AddSpending() {
+  // use state here to update categories
+  const [categories, setCategories] = useState([]);
+  
   const { user } = useContext(AuthContext);
   const [showCurrCategory, setShowCurrCategory] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);

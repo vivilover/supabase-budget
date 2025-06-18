@@ -48,6 +48,16 @@ export async function getList() {
   return data;
 }
 
+export async function getCategory(id) {
+  const { data, error } = await supabase.from("category").select().eq('user_id', id);
+  if (!error) {
+    console.log(data);
+  } else {
+    console.log(error);
+  }
+  return data;
+}
+
 export async function insertSpending(
   name,
   date,
@@ -64,6 +74,19 @@ export async function insertSpending(
       category: category,
       description: description,
       amount: amount,
+      user_id: id,
+    });
+  return error;
+}
+
+export async function insertCategory(
+  name,
+  id,
+) {
+  const { error } = await supabase
+    .from("category")
+    .insert({
+      name: name,
       user_id: id,
     });
   return error;
