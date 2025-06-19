@@ -6,6 +6,7 @@ import AddSpending from "./components/AddSpending";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import SideBar from "./components/SideBar";
+import Chart from './components/Chart';
 import { supabase } from "./utils/queries";
 import { AuthContext } from "./components/AuthContext";
 
@@ -37,6 +38,7 @@ function App() {
             index // <-- "/"
             element={<AddSpending />}
           />
+          <Route path="visualize" element={<Chart />} />
         </Route>
       </Routes>
   ) : (
