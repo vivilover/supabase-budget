@@ -63,7 +63,7 @@ function AddSpending() {
     <div>
       <form
         action=""
-        className="add-form gap-x-2"
+        className="add-form flex gap-x-1"
         onSubmit={handleSubmit(onSubmit)}
       >
         <label htmlFor="date">Date</label>
@@ -93,7 +93,7 @@ function AddSpending() {
         </button>
       </form>
       <div className="text-red-400 text-sm">
-        * Spending category can be added below
+        *Spending category can be added below
       </div>
       {/* <div
         className="font-medium text-gray-400"

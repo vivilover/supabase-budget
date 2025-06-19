@@ -7,6 +7,7 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import SideBar from "./components/SideBar";
 import Chart from './components/Chart';
+import ViewOption from "./components/ViewOption";
 import { supabase } from "./utils/queries";
 import { AuthContext } from "./components/AuthContext";
 
@@ -33,7 +34,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SideBar />}>
           {/* list of all purchase */}
-          <Route path="history" element={<SpendingList />} /> 
+          <Route path="history" element={<ViewOption />} /> 
           <Route
             index // <-- "/"
             element={<AddSpending />}

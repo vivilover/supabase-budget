@@ -8,6 +8,9 @@ function SpendingList() {
   const userId = user.id;
   const userName = user.email.split('@')[0];
 
+  // search button (filter by spending.name)
+  // view by category 
+  // view by month (2025 May, 2025 Jun, etc)
   useEffect(() => {
     (async () => {
       const spendings = await getList(userId);
